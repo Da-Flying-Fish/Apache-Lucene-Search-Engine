@@ -1,5 +1,4 @@
 package com.tcd.app.handler;
-import org.apache.lucene.document.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,33 +10,37 @@ public class Parser {
      */
 
     public static ArrayList<HashMap<String,String>> fTParser(){
-        return new ArrayList<Document>();
+        return new ArrayList<>();
+
     }
     /***
      * Method To Parse Documents realted to Federal Register
      */
 
-    public static ArrayList<Document> fRParser(){
-        return new ArrayList<Document>();
+    public static ArrayList<HashMap<String,String>> fRParser(){
+
+        return new ArrayList<>();
     }
     /***
      * Method To Parse Documents realted to Foreign Broadcast Information Service
      */
 
-    public static ArrayList<Document> fBISParser(){
-        return new ArrayList<Document>();
+    public static ArrayList<HashMap<String,String>> fBISParser(){
+        return new ArrayList<>();
     }
     /**
      * Method To Parse Documents realted to Los Angeles Times
      */
-    public static ArrayList<Document> lATParser(){
-        return new ArrayList<Document>();
+    public static ArrayList<HashMap<String,String>> lATParser(){
+
+        return new ArrayList<>();
     }
     /**
      *Method To Parse  Query Documents
      */
-    public static ArrayList<String> queryParser(){
-        return new ArrayList<String>();
+    public static ArrayList<HashMap<String,String>>queryParser(){
+
+        return new ArrayList<>();
     }
 
 }

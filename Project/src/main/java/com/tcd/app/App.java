@@ -1,7 +1,4 @@
 package com.tcd.app;
-import com.tcd.app.helper.*;
-import com.tcd.app.handler.*;
-
 /**
  * Hello world!
  *
