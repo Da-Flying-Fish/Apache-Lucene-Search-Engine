@@ -29,7 +29,7 @@ public class PropertyHelper {
 
         Properties prop = null;
         try {
-            prop = readPropFile("Project/src/config.Properties");
+            prop = readPropFile("src/config.Properties");
             System.out.println("DataSourcePath= "+prop.getProperty("SourceDataFolderPath"));
             System.out.println("Index Folder ="+prop.get("IndexedDataFolderPath"));
             System.out.println("Results Folder ="+prop.get("ResultDataFolderPath"));
