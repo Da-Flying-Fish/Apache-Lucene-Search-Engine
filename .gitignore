@@ -12,3 +12,9 @@ buildNumber.properties
 .idea
 Data/
 Project.iml
+/.metadata/
+Project/.settings/org.eclipse.m2e.core.prefs
+Project/.settings/org.eclipse.jdt.core.prefs
+Project/.settings/org.eclipse.core.resources.prefs
+Project/.project
+Project/.classpath
