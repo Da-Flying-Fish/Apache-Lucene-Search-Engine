@@ -2,6 +2,8 @@ package com.tcd.app.handler;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import java.io.File;
+
 public class Parser {
 
     /***
@@ -31,6 +33,10 @@ public class Parser {
      * Method To Parse Documents realted to Los Angeles Times
      */
     public static ArrayList<HashMap<String,String>> lATParser(){
+		String latDirPath = "resources/DataSource/latimes/";
+
+		File files[] = new File(latDirPath).listFiles();
+		System.out.println(files.length);
 
         return new ArrayList<>();
     }
