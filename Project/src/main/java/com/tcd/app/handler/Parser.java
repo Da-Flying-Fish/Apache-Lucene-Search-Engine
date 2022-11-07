@@ -61,6 +61,7 @@ public class Parser {
                                 content = elements[2];
                             }
                         }
+                        //TAG start or TAG end
                         else if(elements.length == 2){
                             if(elements[1].contains("/")){
                                 document.put(attribute, content.strip());
@@ -72,6 +73,7 @@ public class Parser {
                                 content = "";
                             }
                         }
+                        //TAG free content
                         else{
                             content = content.concat("").concat(elements[0]).concat(" ");
                         }
