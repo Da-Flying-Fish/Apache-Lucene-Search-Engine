@@ -1,6 +1,5 @@
 package com.tcd.app.handler;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,11 +46,11 @@ public class Parser {
                 Elements listDocuments =parsedDocuments.getElementsByTag(FIBSFieldsData.DOC.getFieldType());
                 for (Element doc: listDocuments ) {
                     HashMap<String,String> documentMapping = new HashMap<>();
-                    documentMapping.put(Constants.FIBS_DOC_NO,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_NO)).text());
-                    documentMapping.put(Constants.FIBS_DOC_Contents,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_CONTENTS)).text());
-                    documentMapping.put(Constants.FIBS_DOC_Date,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_DATE)).text());
-                    documentMapping.put(Constants.FIBS_DOC_TITLE,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_Title)).text());
-                    documentMapping.put(Constants.FIBS_DOC_Ftags,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_FTAGS)).text());
+                    documentMapping.put(Constants.FIBS_DOC_NO,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_NO.getFieldType())).text());
+                    documentMapping.put(Constants.FIBS_DOC_Contents,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_CONTENTS.getFieldType())).text());
+                    documentMapping.put(Constants.FIBS_DOC_Date,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_DATE.getFieldType())).text());
+                    documentMapping.put(Constants.FIBS_DOC_TITLE,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_Title.getFieldType())).text());
+                    documentMapping.put(Constants.FIBS_DOC_Ftags,doc.getElementsByTag(String.valueOf(FIBSFieldsData.DOC_FTAGS.getFieldType())).text());
                     fbisParsedDocCollection.add(documentMapping);
                 }
 
