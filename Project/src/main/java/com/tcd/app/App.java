@@ -15,15 +15,9 @@ public class App
 {
     public static void main( String[] args )
     {
-        long start = System.currentTimeMillis();
         String propertyFilePath="Project/src/config.Properties";
         Properties properties = PropertyHelper.readPropFile(propertyFilePath);
         Parser.fBISParser(properties);
-        long end = System.currentTimeMillis();
-        NumberFormat formatter = new DecimalFormat("#0.00000");
-        System.out.print("Execution time is " + formatter.format((end - start) / 1000d) + " seconds");
-
-
 
     }
 }
