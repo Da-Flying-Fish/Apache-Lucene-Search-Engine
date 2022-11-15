@@ -1,7 +1,6 @@
 package com.tcd.app.helper;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 
 public class PropertyHelper {
@@ -11,9 +10,11 @@ public class PropertyHelper {
         FileInputStream propFile = null;
 
         try {
+               if(propertiesVal== null){
                 propFile = new FileInputStream(propertyFilePath);
                 propertiesVal = new Properties();
                 propertiesVal.load(propFile);
+               }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,7 +28,7 @@ public class PropertyHelper {
      */
     public static void main(String[] args){
 
-        Properties prop = null;
+        Properties prop ;
         try {
             prop = readPropFile("Project/src/config.Properties");
             System.out.println("DataSourcePath= "+prop.getProperty("SourceDataFolderPath"));
