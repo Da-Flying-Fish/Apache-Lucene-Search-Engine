@@ -1,6 +1,10 @@
 package com.tcd.app.handler;
 import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Arrays;
 
@@ -23,6 +27,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import com.tcd.app.dataModels.Constants;
+import java.util.List;
+import java.util.Properties;
+
+import com.tcd.app.helper.PropertyHelper;
 
 public class Parser {
 
@@ -159,23 +167,91 @@ public class Parser {
     /**
      *Method To Parse  Query Documents
      */
-    public static ArrayList<HashMap<String,String>>queryParser(){
+    public static ArrayList<HashMap<String,String>> queryParser(){
+    	ArrayList<HashMap<String, String>> queries = new ArrayList<HashMap<String,String>>();
+    	Properties prop = PropertyHelper.readPropFile("src/config.Properties");
+    	try {
+	    	BufferedReader br = new BufferedReader(new FileReader(prop.getProperty("QueryDataFilePath")));
+			String line = br.readLine();
+			while (line != null)
+			{
+			   if (line.equals("<top>"))
+			   {
+				   HashMap<String, String> entry = new HashMap<String, String>();
+				   String number = "";
+				   String title = "";
+				   String description = "";
+				   String narrative = "";
+				   while (!line.equals("</top>"))
+				   {
+					   boolean end = false;
+					   if (line.contains("<num>"))
+					   {
+						   String[] split = line.split("\\s+");
+						   number += split[2];
+					   }
+					   else if (line.contains("<title>"))
+					   {
+						   String[] split = line.split("\\s+");
+						   List<String> titleList = new ArrayList<String>();
+						   titleList.addAll(Arrays.asList(split));
+						   titleList.remove(0);
+						   title = String.join(" ", titleList);
+					   }
+					   else if(line.contains("<desc>"))
+					   {
+						   line = br.readLine();
+						   while(!line.contains("<narr>"))
+						   {
+							   if(!description.equals(""))
+								   description += " ";
+							   if (!line.equals(""))
+								   description += line.trim();
+							   line = br.readLine();
+						   }
 
-        return new ArrayList<>();
+						   line = br.readLine();
+						   while(!line.contains("</top>"))
+						   {
+							   if(!narrative.equals(""))
+								   narrative += " ";
+							   if (!line.equals(""))
+								   narrative += line.trim();
+							   line = br.readLine();
+						   }
+						   end = true;
+					   }
+
+					   if(!end)
+						   line = br.readLine();
+				   }
+				   entry.put("number", number);
+				   entry.put("title", title);
+				   entry.put("description", description);
+				   entry.put("narrative", narrative);
+				   queries.add(entry);
+			   }
+			   line = br.readLine();
+			}
+			br.close();
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return queries;
     }
 
-	private static void progressBar(int progress, int goal) {
-		int percentage = Math.round(((float)progress/(float)goal)*100);
+    private static void progressBar(int progress, int goal) {
+        int percentage = Math.round(((float)progress/(float)goal)*100);
 
-		StringBuilder complete = new StringBuilder("");
-		StringBuilder incomplete = new StringBuilder();
+        StringBuilder complete = new StringBuilder("");
+        StringBuilder incomplete = new StringBuilder();
 
-		for (int i=0 ; i<percentage ; i++)
-			complete.append("█");
+        for (int i=0 ; i<percentage ; i++)
+            complete.append("█");
 
-		for (int i=100 ; i>=percentage ; i--)
-			incomplete.append("░");
+        for (int i=100 ; i>=percentage ; i--)
+            incomplete.append("░");
 
-		System.out.print(complete.toString() + incomplete.toString() + " " + percentage + "%" + "\r");
-	}
+        System.out.print(complete.toString() + incomplete.toString() + " " + percentage + "%" + "\r");
+    }
 }
