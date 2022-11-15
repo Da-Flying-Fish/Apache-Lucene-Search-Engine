@@ -5,7 +5,6 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.similarities.ClassicSimilarity;
@@ -14,14 +13,13 @@ import org.apache.lucene.store.FSDirectory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 public class Indexer {
 
-    public void createIndex(List<Map<String, String>> collections){
+    public void createIndex(List<Map<String, String>> collection){
         //STANDARD ANALYSER
         Analyzer analyzer = new StandardAnalyzer();
 
@@ -38,8 +36,8 @@ public class Indexer {
 
             IndexWriter iwriter = new IndexWriter(directory, config);
 
-            for (int i = 0; i < collections.size(); i++) {
-                addDocument(iwriter, collections.get(i));
+            for (int i = 0; i < collection.size(); i++) {
+                addDocument(iwriter, collection.get(i));
             }
 
             iwriter.close();

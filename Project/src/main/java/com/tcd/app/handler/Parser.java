@@ -1,54 +1,34 @@
 package com.tcd.app.handler;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Arrays;
 
-import java.lang.StringBuilder;
-import java.lang.Math;
-import java.lang.OutOfMemoryError;
-
-import java.io.File;
-import java.io.IOException;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Properties;
-import com.tcd.app.helper.Utilities;
+import com.tcd.app.dataModels.Constants;
 import com.tcd.app.dataModels.FIBSFieldsData;
+import com.tcd.app.helper.PropertyHelper;
+import com.tcd.app.helper.Utilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import com.tcd.app.dataModels.Constants;
-import java.util.List;
-import java.util.Properties;
 
-import com.tcd.app.helper.PropertyHelper;
-
-import com.tcd.app.helper.Utilities;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Parser {
 
+	/***
+	 * Method To Parse Documents realted to Federal Register
+	 */
+	public static ArrayList<HashMap<String,String>> fRParser(Properties properties) {
+		return new ArrayList<>();
+	}
+
     /***
      * Method To Parse Documents realted to financial Times Limited
      */
-
-    public static List<File> fTParser(Properties properties) {
-        List<File> ftParsedDocCollection = new ArrayList<>();
+    public static ArrayList<HashMap<String,String>> fTParser(Properties properties) {
+		ArrayList<HashMap<String,String>> ftParsedDocCollection = new ArrayList<>();
         // try-catch block to handle exceptions
         File[] files = new File[0];
         try {
@@ -88,6 +68,9 @@ public class Parser {
         return ftParsedDocCollection;
     }
 
+	/***
+	 * Method To Parse Documents realted to Foreign Broadcast Information Service
+	 */
     public static ArrayList<HashMap<String,String>> fBISParser(Properties properties){
         ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
         String dataSourceDir = properties.getProperty("SourceDataFolderPath");
@@ -116,6 +99,7 @@ public class Parser {
         System.out.println(fbisParsedDocCollection.size());
         return fbisParsedDocCollection;
     }
+
     /**
      * Method To Parse Documents realted to Los Angeles Times
      */
@@ -198,7 +182,7 @@ public class Parser {
 
         return docMapList;
     }
-}
+
     /**
      *Method To Parse  Query Documents
      */
