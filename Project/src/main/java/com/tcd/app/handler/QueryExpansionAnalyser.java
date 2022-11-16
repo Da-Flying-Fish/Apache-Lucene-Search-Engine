@@ -22,44 +22,34 @@ import org.apache.lucene.analysis.synonym.WordnetSynonymParser;
 public class QueryExpansionAnalyser extends Analyzer
 {
 	protected TokenStreamComponents createComponents(String fieldName){
-	      System.out.println("1");
-	    // TODO Auto-generated method stub
 	    Tokenizer source = new ClassicTokenizer();
 
 	    TokenStream filter = new LowerCaseFilter(source);
 	    SynonymMap mySynonymMap = null;
 
 	    try {
+		    mySynonymMap = createSynonymMap();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-	        try {
-				mySynonymMap = buildSynonym();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }
 	    filter = new SynonymGraphFilter(filter, mySynonymMap, false); 
 	    filter = new FlattenGraphFilter(filter);
 
 	    return new TokenStreamComponents(source, filter);
 	}
 	
-	private static SynonymMap buildSynonym() throws IOException, ParseException
-	{    
-		System.out.print("build");
+	private static SynonymMap createSynonymMap() throws IOException, ParseException{    
 	    File file = new File("wn\\wn_s.pl");
 
 	    InputStream stream = new FileInputStream(file);
 
-	    Reader rulesReader = new InputStreamReader(stream); 
+	    Reader reader = new InputStreamReader(stream); 
 	    SynonymMap.Builder parser = null;
 	    parser = new WordnetSynonymParser(true, true, new StandardAnalyzer(CharArraySet.EMPTY_SET));
-	    System.out.print(parser.toString());
-	   ((WordnetSynonymParser) parser).parse(rulesReader);  
+	   ((WordnetSynonymParser) parser).parse(reader);  
 	    SynonymMap synonymMap = parser.build();
 	    return synonymMap;
 	}
