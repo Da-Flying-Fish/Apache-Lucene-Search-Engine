@@ -72,7 +72,7 @@ public class Parser {
 	 * Method To Parse Documents realted to Foreign Broadcast Information Service
 	 */
     public static ArrayList<HashMap<String,String>> fBISParser(){
-		Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+		Properties properties = PropertyHelper.readPropFile("src/config.Properties");
 		ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
         String dataSourceDir = properties.getProperty("SourceDataFolderPath");
         String fbisFolderPath=dataSourceDir+"/"+properties.getProperty("FBISFolderName")+"/";
@@ -106,7 +106,7 @@ public class Parser {
      * Method To Parse Documents realted to Los Angeles Times
      */
     public static ArrayList<HashMap<String,String>> lATParser() {
-		Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+		Properties properties = PropertyHelper.readPropFile("src/config.Properties");
 		String dataSourceDir = properties.getProperty("SourceDataFolderPath");
 		String latDirPath = dataSourceDir+"/"+properties.getProperty("LATFolderName")+"/";
 
@@ -192,7 +192,7 @@ public class Parser {
      */
     public static ArrayList<HashMap<String,String>> queryParser(){
     	ArrayList<HashMap<String, String>> queries = new ArrayList<HashMap<String,String>>();
-    	Properties prop = PropertyHelper.readPropFile("Project/src/config.Properties");
+    	Properties prop = PropertyHelper.readPropFile("src/config.Properties");
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(prop.getProperty("QueryDataFilePath")));
 			String line = br.readLine();

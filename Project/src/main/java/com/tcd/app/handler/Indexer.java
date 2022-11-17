@@ -2,12 +2,10 @@ package com.tcd.app.handler;
 
 import com.tcd.app.helper.PropertyHelper;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.similarities.ClassicSimilarity;
@@ -41,6 +39,7 @@ public class Indexer {
             // Set up an index writer to add process and save documents to the index
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
             config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            // config.setIndexSort() -- USEFULL?!?
 
             //STANDARD SIMILARITY
             config.setSimilarity(new ClassicSimilarity());
@@ -63,7 +62,7 @@ public class Indexer {
     private static void addDocument(IndexWriter iwriter, Map<String, String> doc) throws IOException {
         Document document = new Document();
         for(Map.Entry<String, String> attribute : doc.entrySet()){
-            document.add(new StringField(attribute.getKey(), attribute.getValue(), Field.Store.YES));
+            document.add(new TextField(attribute.getKey(), attribute.getValue(), Field.Store.YES));
         }
         iwriter.addDocument(document);
     }
