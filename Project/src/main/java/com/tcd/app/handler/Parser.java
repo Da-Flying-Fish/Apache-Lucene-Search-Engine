@@ -45,7 +45,7 @@ public class Parser {
 
                 Document parsedDoc = Jsoup.parse(tempFile);
                 System.out.println(parsedDoc.toString());
-                Elements listDocuments = parsedDoc.getElementsByTag("DOC");
+                Elements listDocuments = parsedDoc.getElementsByTag(FTFieldsData.DOC.getFieldType());
                 for (Element doc : listDocuments) {
                     HashMap<String, String> documentMapping = new HashMap<>();
                     documentMapping.put(Constants.FT_DOC_NO, doc.getElementsByTag(String.valueOf(FTFieldsData.DOC_NO.getFieldType())).text());
