@@ -2,7 +2,6 @@ package com.tcd.app.handler;
 
 import com.tcd.app.dataModels.Constants;
 import com.tcd.app.dataModels.FTFieldsData;
-import com.tcd.app.helper.Utilities;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,7 +10,10 @@ import org.jsoup.select.Elements;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Properties;
 
 public class Parser {
 
@@ -25,7 +27,6 @@ public class Parser {
         // try-catch block to handle exceptions
         File[] files = new File[0];
         // Create a file object
-        //File ftFileList = new File("/Users/koushikkodukula/IdeaProjects/Apache-Lucene-Search-Engine2/Project/resources/DataSource/ft");
         File ftFileList = new File("/Users/koushikkodukula/IdeaProjects/Apache-Lucene-Search-Engine2/Project/resources/DataSource/ft");
 
         // Create a FilenameFilter
