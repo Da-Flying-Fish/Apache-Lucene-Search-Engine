@@ -27,8 +27,7 @@ public class Indexer {
         Analyzer analyzer = new StandardAnalyzer();
 
         Properties properties = PropertyHelper.readPropFile("src/config.Properties");
-        String dataSourceDir = properties.getProperty("IndexedDataFolderPath");
-        String indexDirPath = dataSourceDir+"/"+properties.getProperty("IndexName");
+        String indexDirPath = properties.getProperty("IndexedDataFolderPath");
 
         try{
             // Open the directory that contains the search index
@@ -38,7 +37,7 @@ public class Indexer {
 
             // Set up an index writer to add process and save documents to the index
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
-            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
+            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
             // config.setIndexSort() -- USEFULL?!?
 
             //STANDARD SIMILARITY
