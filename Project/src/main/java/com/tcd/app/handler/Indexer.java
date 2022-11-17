@@ -26,14 +26,14 @@ public class Indexer {
         //STANDARD ANALYSER
         Analyzer analyzer = new StandardAnalyzer();
 
-        Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+        Properties properties = PropertyHelper.readPropFile("src/config.Properties");
         String dataSourceDir = properties.getProperty("IndexedDataFolderPath");
         String indexDirPath = dataSourceDir+"/"+properties.getProperty("IndexName");
 
         try{
             // Open the directory that contains the search index
             //Directory directory = FSDirectory.open(Paths.get("Project/resources/index/latimes.index"));
-            Directory directory = FSDirectory.open(Paths.get("indexDirPath"));
+            Directory directory = FSDirectory.open(Paths.get(indexDirPath));
 
 
             // Set up an index writer to add process and save documents to the index
