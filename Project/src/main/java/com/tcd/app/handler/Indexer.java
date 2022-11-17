@@ -1,6 +1,9 @@
 package com.tcd.app.handler;
 
+import com.tcd.app.helper.PropertyHelper;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -14,22 +17,30 @@ import org.apache.lucene.store.FSDirectory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class Indexer {
 
-    public void createIndex(List<Map<String, String>> collection){
+    public static void createIndex(ArrayList<HashMap<String,String>> collection){
         //STANDARD ANALYSER
         Analyzer analyzer = new StandardAnalyzer();
 
+        Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+        String dataSourceDir = properties.getProperty("IndexedDataFolderPath");
+        String indexDirPath = dataSourceDir+"/"+properties.getProperty("IndexName");
+
         try{
             // Open the directory that contains the search index
-            Directory directory = FSDirectory.open(Paths.get("Project/resources/index/latimes.index"));
+            //Directory directory = FSDirectory.open(Paths.get("Project/resources/index/latimes.index"));
+            Directory directory = FSDirectory.open(Paths.get("indexDirPath"));
+
 
             // Set up an index writer to add process and save documents to the index
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
-            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+            config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
             //STANDARD SIMILARITY
             config.setSimilarity(new ClassicSimilarity());
@@ -49,7 +60,7 @@ public class Indexer {
 
     }
 
-    private void addDocument(IndexWriter iwriter, Map<String, String> doc) throws IOException {
+    private static void addDocument(IndexWriter iwriter, Map<String, String> doc) throws IOException {
         Document document = new Document();
         for(Map.Entry<String, String> attribute : doc.entrySet()){
             document.add(new StringField(attribute.getKey(), attribute.getValue(), Field.Store.YES));

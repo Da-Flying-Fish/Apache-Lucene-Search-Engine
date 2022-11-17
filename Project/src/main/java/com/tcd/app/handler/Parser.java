@@ -71,12 +71,14 @@ public class Parser {
 	/***
 	 * Method To Parse Documents realted to Foreign Broadcast Information Service
 	 */
-    public static ArrayList<HashMap<String,String>> fBISParser(Properties properties){
-        ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
+    public static ArrayList<HashMap<String,String>> fBISParser(){
+		Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+		ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
         String dataSourceDir = properties.getProperty("SourceDataFolderPath");
         String fbisFolderPath=dataSourceDir+"/"+properties.getProperty("FBISFolderName")+"/";
         List<File> fbisFileList=Utilities.getFilesInDir(fbisFolderPath);
         for (File fbisFile:fbisFileList) {
+			progressBar(fbisFileList.indexOf(fbisFile), fbisFileList.size());
             Document parsedDocuments = null;
             try {
                 parsedDocuments = Jsoup.parse(fbisFile);
@@ -96,7 +98,7 @@ public class Parser {
             }
 
         }
-        System.out.println(fbisParsedDocCollection.size());
+        System.out.println("\n" + fbisParsedDocCollection.size());
         return fbisParsedDocCollection;
     }
 
@@ -104,7 +106,9 @@ public class Parser {
      * Method To Parse Documents realted to Los Angeles Times
      */
     public static ArrayList<HashMap<String,String>> lATParser() {
-		String latDirPath = "resources/DataSource/latimes/";
+		Properties properties = PropertyHelper.readPropFile("Project/src/config.Properties");
+		String dataSourceDir = properties.getProperty("SourceDataFolderPath");
+		String latDirPath = dataSourceDir+"/"+properties.getProperty("LATFolderName")+"/";
 
 		ArrayList<HashMap<String, String>> docMapList = new ArrayList<>();
 
@@ -188,9 +192,9 @@ public class Parser {
      */
     public static ArrayList<HashMap<String,String>> queryParser(){
     	ArrayList<HashMap<String, String>> queries = new ArrayList<HashMap<String,String>>();
-    	Properties prop = PropertyHelper.readPropFile("src/config.Properties");
-    	try {
-	    	BufferedReader br = new BufferedReader(new FileReader(prop.getProperty("QueryDataFilePath")));
+    	Properties prop = PropertyHelper.readPropFile("Project/src/config.Properties");
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(prop.getProperty("QueryDataFilePath")));
 			String line = br.readLine();
 			while (line != null)
 			{
@@ -228,11 +232,6 @@ public class Parser {
 								   description += line.trim();
 							   line = br.readLine();
 						   }
-
-
-
-
-
 						   line = br.readLine();
 						   while(!line.contains("</top>"))
 						   {
@@ -272,7 +271,7 @@ public class Parser {
         for (int i=0 ; i<percentage ; i++)
             complete.append("█");
 
-        for (int i=100 ; i>=percentage ; i--)
+        for (int i=99 ; i>=percentage ; i--)
             incomplete.append("░");
 
         System.out.print(complete.toString() + incomplete.toString() + " " + percentage + "%" + "\r");
