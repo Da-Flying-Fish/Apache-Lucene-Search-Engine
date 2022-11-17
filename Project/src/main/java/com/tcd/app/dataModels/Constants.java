@@ -6,11 +6,11 @@ package com.tcd.app.dataModels;
 
 public class Constants {
     // Constants of FT Files
-    public static String FT_DOC_TEXT="text";
-    public static String FT_DOC_HEADLINE ="headline";
-    public static String FT_DOC_BYLINE="byline";
-    public static String FT_DOC_CORRECTION="correction";
-    public static String FT_DOC_CORRECTION_DATA="correction date";
-    public static String FT_DOC_NO="doc number";
-    public static String FT_DOC_ID="doc id";
+    public static String FT_DOC="doc";
+    public static String FT_DOC_NO="docnumber";
+    public static String FT_PROFILE="profile";
+    public static String FT_DATE="date";
+    public static String FT_HEADLINE="headline";
+    public static String FT_TEXT="text";
+    public static String FT_PUB="headline";
 }
