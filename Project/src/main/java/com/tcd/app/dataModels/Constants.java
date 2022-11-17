@@ -5,5 +5,7 @@ package com.tcd.app.dataModels;
  */
 
 public class Constants {
-
+    public static final String FR_DOC_NO = "docno" ;
+    public static final String FR_PARENT = "parent" ;
+    public static final String FR_TEXT= "text" ;
 }
