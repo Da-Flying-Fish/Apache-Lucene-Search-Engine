@@ -71,7 +71,7 @@ public class Indexer {
         Document document = new Document();
         for(Map.Entry<String, String> attribute : doc.entrySet()){
             if(Constants.ConstantKeyMapping.keySet().contains(attribute.getKey()))
-                document.add(new TextField(attribute.getKey(), attribute.getValue(), Field.Store.YES));
+                document.add(new TextField(Constants.ConstantKeyMapping.get(attribute.getKey()), attribute.getValue(), Field.Store.YES));
             else {
                 String other_value =document.get("OTHER");
                 if(other_value==null){
