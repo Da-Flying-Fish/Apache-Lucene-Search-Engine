@@ -51,7 +51,6 @@ public class Searcher
  			System.out.println("Error! Index directory does not exist");
  			return;
  		}
- 		
         
         //STANDARD ANALYSER
         Analyzer analyzer = new StandardAnalyzer();
@@ -63,6 +62,9 @@ public class Searcher
        try{
             // Open the directory that contains the search index
             Directory directory = FSDirectory.open(Paths.get(indexDirPath));
+            
+            path = Paths.get(resultDirPath);
+     		Files.createDirectory(path);
             
             path = Paths.get(resultFilePath);
     		Files.deleteIfExists(path);
@@ -97,11 +99,10 @@ public class Searcher
 	    for (int i = 0; i < hits.length; i++)
 	    {
 		   Document hitDoc = isearcher.doc(hits[i].doc);
-		   System.out.println("hello");
 		   String id = queryMap.get("number");
 		   
 		   FileWriter fw = new FileWriter(resultFile, true);
-		   fw.write(id + " 0 " + hitDoc.get("ID") + " 0 " + hits[i].score + " STANDARD\n");
+		   fw.write(id + " 0 " + hitDoc.get("DOC_ID") + " 0 " + hits[i].score + " STANDARD\n");
 		   fw.close();
 	    }
 		

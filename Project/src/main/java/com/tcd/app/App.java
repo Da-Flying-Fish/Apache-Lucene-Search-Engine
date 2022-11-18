@@ -2,6 +2,7 @@ package com.tcd.app;
 
 import com.tcd.app.handler.Indexer;
 import com.tcd.app.handler.Parser;
+import com.tcd.app.handler.Searcher;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class App
         // Parsing Query Documents
         ArrayList<HashMap<String,String>> queries = Parser.queryParser();
         System.out.println("Complete");
+        Searcher.queryIndex(queries);
 
     }
 }
