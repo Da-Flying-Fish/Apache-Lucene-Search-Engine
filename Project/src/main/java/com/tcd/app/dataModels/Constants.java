@@ -19,4 +19,7 @@ public class Constants {
     public static String FT_HEADLINE="headline";
     public static String FT_TEXT="text";
     public static String FT_PUB="headline";
+    public static final String FR_DOC_NO = "docno" ;
+    public static final String FR_PARENT = "parent" ;
+    public static final String FR_TEXT= "text" ;
 }
