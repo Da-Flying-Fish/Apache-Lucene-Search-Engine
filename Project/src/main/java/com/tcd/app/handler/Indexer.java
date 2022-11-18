@@ -11,6 +11,7 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import com.tcd.app.dataModels.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +62,18 @@ public class Indexer {
     private static void addDocument(IndexWriter iwriter, Map<String, String> doc) throws IOException {
         Document document = new Document();
         for(Map.Entry<String, String> attribute : doc.entrySet()){
-            document.add(new TextField(attribute.getKey(), attribute.getValue(), Field.Store.YES));
+            if(Constants.ConstantKeyMapping.keySet().contains(attribute.getKey()))
+                document.add(new TextField(attribute.getKey(), attribute.getValue(), Field.Store.YES));
+            else {
+                String other_value =document.get("OTHER");
+                if(other_value==null){
+                    document.add(new TextField("OTHER", attribute.getValue(), Field.Store.YES));
+                }
+                else{
+                    document.add(new TextField(("OTHER"),other_value+attribute.getValue(),Field.Store.YES));
+                }
+            }
+
         }
         iwriter.addDocument(document);
     }

@@ -73,6 +73,10 @@ public class Parser {
 					documentMapping.put(Constants.FR_DOC_NO,doc.getElementsByTag(String.valueOf(FRFieldsData.DOC_NO.getFieldType())).text());
 					documentMapping.put(Constants.FR_PARENT,doc.getElementsByTag(String.valueOf(FRFieldsData.PARENT.getFieldType())).text());
 					documentMapping.put(Constants.FR_TEXT,doc.getElementsByTag(String.valueOf(FRFieldsData.TEXT.getFieldType())).text());
+				    // No conistent Data is present so storing empty value
+					documentMapping.put("Date","");
+					// No title present for the document so mantaining empty value in hash map
+					documentMapping.put("title","");
 					frParsedDocCollection.add(documentMapping);
 
 				}
@@ -135,7 +139,7 @@ public class Parser {
                     documentMapping.put(Constants.FT_DATE, doc.getElementsByTag(String.valueOf(FTFieldsData.DATE.getFieldType())).text());
                     documentMapping.put(Constants.FT_HEADLINE, doc.getElementsByTag(String.valueOf(FTFieldsData.HEADLINE.getFieldType())).text());
                     documentMapping.put(Constants.FT_TEXT, doc.getElementsByTag(String.valueOf(FTFieldsData.TEXT.getFieldType())).text());
-                    documentMapping.put(Constants.FT_PUB, doc.getElementsByTag(String.valueOf(FTFieldsData.PUB.getFieldType())).text());
+//                    documentMapping.put(Constants.FT_PUB, doc.getElementsByTag(String.valueOf(FTFieldsData.PUB.getFieldType())).text());
                     ftParsedDocCollection.add(documentMapping);
                 }
             }

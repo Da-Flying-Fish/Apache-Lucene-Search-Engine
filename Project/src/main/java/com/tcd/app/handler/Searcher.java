@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import com.tcd.app.dataModels.Constants;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -56,7 +57,7 @@ public class Searcher
         Analyzer analyzer = new StandardAnalyzer();
         
        // Create the query parser.
-       String[] fields = {"ti", "Date1", "text"};
+       String[] fields = Constants.documentFieldList;
        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzer);
         
        try{

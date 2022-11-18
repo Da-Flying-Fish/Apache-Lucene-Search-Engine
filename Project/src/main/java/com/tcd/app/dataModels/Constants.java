@@ -1,5 +1,7 @@
 package com.tcd.app.dataModels;
 
+import java.util.HashMap;
+
 /**
  * This Class can be used to store string literals
  */
@@ -19,7 +21,35 @@ public class Constants {
     public static String FT_HEADLINE="headline";
     public static String FT_TEXT="text";
     public static String FT_PUB="headline";
-    public static final String FR_DOC_NO = "docno" ;
-    public static final String FR_PARENT = "parent" ;
-    public static final String FR_TEXT= "text" ;
+    public static  String FR_DOC_NO = "docno" ;
+    public static  String FR_PARENT = "parent" ;
+    public static  String FR_TEXT= "text" ;
+    public static HashMap<String,String> ConstantKeyMapping ;
+    static {
+        ConstantKeyMapping = new HashMap<>();
+        // Fbis
+        ConstantKeyMapping.put("docid", "DOC_ID");
+        ConstantKeyMapping.put("words","TEXT");
+
+        // FR
+        ConstantKeyMapping.put("docno","DOC_ID");
+        ConstantKeyMapping.put("title","TITLE");
+        ConstantKeyMapping.put("text","TEXT");
+        ConstantKeyMapping.put("Date","DATE");
+
+        //FT
+        ConstantKeyMapping.put("docnumber","DOC_ID");
+        ConstantKeyMapping.put("headline","TITLE");
+        ConstantKeyMapping.put("date","DATE");
+        //Latime
+        ConstantKeyMapping.put("DOCNO","DOC_ID");
+        ConstantKeyMapping.put("HEADLINE","TITLE");
+        ConstantKeyMapping.put("DATE","DATE");
+        ConstantKeyMapping.put("TEXT","TEXT");
+
+    }
+    public static String[] documentFieldList = new String[]{"DOC_ID","TITLE","DATE","TEXT","OTHER"};
+
+
+
 }
