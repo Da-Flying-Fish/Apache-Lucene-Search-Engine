@@ -57,6 +57,7 @@ public class Searcher
         
        // Create the query parser.
        String[] fields = {"ti", "Date1", "text"};
+	   //TODO : add standard fields from the map here
        MultiFieldQueryParser parser = new MultiFieldQueryParser(fields, analyzer);
         
        try{
