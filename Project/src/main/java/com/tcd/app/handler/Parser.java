@@ -1,9 +1,7 @@
 package com.tcd.app.handler;
 
+import com.tcd.app.dataModels.*;
 import com.tcd.app.dataModels.Constants;
-import com.tcd.app.dataModels.FTFieldsData;
-import com.tcd.app.dataModels.Constants;
-import com.tcd.app.dataModels.FIBSFieldsData;
 import com.tcd.app.helper.PropertyHelper;
 import com.tcd.app.helper.Utilities;
 import org.jsoup.Jsoup;
@@ -26,17 +24,82 @@ import java.util.Properties;
 
 public class Parser {
 
-    /***
-     * Method To Parse Documents realted to financial Times Limited
-     */
 
-    public static ArrayList<HashMap<String, String>> fTParser(Properties properties) throws IOException {
+	/***
+	 * Method To Parse Documents realted to Federal Register
+	 */
+	public static ArrayList<HashMap<String, String>> fRParser() {
+		Properties properties = PropertyHelper.readPropFile("src/config.Properties");
+		String dataSourceDir = properties.getProperty("SourceDataFolderPath");
+		String fR94FolderPath = dataSourceDir+"/"+properties.getProperty("FR94FolderName")+"/";
+
+		ArrayList<HashMap<String, String>> frParsedDocCollection = new ArrayList<>();
+
+		// try-catch block to handle exceptions
+		File[] files = new File[0];
+		// Create a file object
+		File ftFileList = new File(fR94FolderPath);
+
+		FilenameFilter filter = (ftFileList1, name) -> name.startsWith("0");
+
+		// Get all the names of the files present
+		// in the given directory
+		// and whose names start with "ft9"
+		files = ftFileList.listFiles(filter);
+		Object[] listFiles = Arrays.stream(files).toArray();
+
+		System.out.println("Parsing Federal Register data...");
+		int n = listFiles.length;
+		int i = 0;
+
+		for (Object listFile : listFiles) {
+			i++;
+			progressBar(i, n);
+
+			File FileTemp = (File) listFile;
+			File[] tempFfileLlist = FileTemp.listFiles();
+			for (File tempFile : tempFfileLlist) {
+
+				Document parsedDoc = null;
+				try {
+					parsedDoc = Jsoup.parse(tempFile);
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+				Elements listDocuments = parsedDoc.getElementsByTag(FRFieldsData.DOC.getFieldType());
+
+				for (Element doc : listDocuments) {
+					HashMap<String, String> documentMapping = new HashMap<>();
+					documentMapping.put(Constants.FR_DOC_NO,doc.getElementsByTag(String.valueOf(FRFieldsData.DOC_NO.getFieldType())).text());
+					documentMapping.put(Constants.FR_PARENT,doc.getElementsByTag(String.valueOf(FRFieldsData.PARENT.getFieldType())).text());
+					documentMapping.put(Constants.FR_TEXT,doc.getElementsByTag(String.valueOf(FRFieldsData.TEXT.getFieldType())).text());
+					frParsedDocCollection.add(documentMapping);
+
+				}
+
+			}
+
+
+		}
+		System.out.println("\n");
+		System.out.println(frParsedDocCollection.size());
+		return frParsedDocCollection;
+	}
+
+    /***
+     * Method To Parse Documents realted to Financial Times Limited
+     */
+    public static ArrayList<HashMap<String, String>> fTParser() {
+		Properties properties = PropertyHelper.readPropFile("src/config.Properties");
+		String dataSourceDir = properties.getProperty("SourceDataFolderPath");
+		String ftFolderPath = dataSourceDir+"/"+properties.getProperty("FTFolderName")+"/";
+
         ArrayList<HashMap<String, String>> ftParsedDocCollection = new ArrayList<>();
 
         // try-catch block to handle exceptions
         File[] files = new File[0];
         // Create a file object
-        File ftFileList = new File("/Users/koushikkodukula/IdeaProjects/Apache-Lucene-Search-Engine2/Project/resources/DataSource/ft");
+        File ftFileList = new File(ftFolderPath);
 
         // Create a FilenameFilter
         FilenameFilter filter = (ftFileList1, name) -> name.startsWith("ft9");
@@ -47,13 +110,23 @@ public class Parser {
         files = ftFileList.listFiles(filter);
         Object[] listFiles = Arrays.stream(files).toArray();
 
+		System.out.println("Parsing Financial Times data...");
+		int n = listFiles.length + 1;
+		int i = 0;
+
         for (Object listFile : listFiles) {
             File FileTemp = (File) listFile;
             File[] tempFfileLlist = FileTemp.listFiles();
             for (File tempFile : tempFfileLlist) {
+				progressBar(i, n);
+				i++;
 
-                Document parsedDoc = Jsoup.parse(tempFile);
-                System.out.println(parsedDoc.toString());
+				Document parsedDoc = null;
+				try {
+					parsedDoc = Jsoup.parse(tempFile);
+				} catch (IOException e) {
+					System.err.println(e);
+				}
                 Elements listDocuments = parsedDoc.getElementsByTag(FTFieldsData.DOC.getFieldType());
                 for (Element doc : listDocuments) {
                     HashMap<String, String> documentMapping = new HashMap<>();
@@ -66,24 +139,27 @@ public class Parser {
                     ftParsedDocCollection.add(documentMapping);
                 }
             }
-            System.out.println(ftParsedDocCollection.size());
-
-            return ftParsedDocCollection;
+			System.out.println("\n");
+			return ftParsedDocCollection;
         }
-        return null;
+		System.out.println("\n");
+		return null;
     }
-
 
 	/***
 	 * Method To Parse Documents realted to Foreign Broadcast Information Service
 	 */
     public static ArrayList<HashMap<String,String>> fBISParser(){
 		Properties properties = PropertyHelper.readPropFile("src/config.Properties");
-		ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
         String dataSourceDir = properties.getProperty("SourceDataFolderPath");
         String fbisFolderPath=dataSourceDir+"/"+properties.getProperty("FBISFolderName")+"/";
-        List<File> fbisFileList=Utilities.getFilesInDir(fbisFolderPath);
-        for (File fbisFile:fbisFileList) {
+
+		ArrayList<HashMap<String,String>> fbisParsedDocCollection= new ArrayList<>();
+		List<File> fbisFileList=Utilities.getFilesInDir(fbisFolderPath);
+
+		System.out.println("Parsing Foreign Broadcast Information Service data...");
+
+		for (File fbisFile:fbisFileList) {
 			progressBar(fbisFileList.indexOf(fbisFile), fbisFileList.size());
             Document parsedDocuments = null;
             try {
@@ -104,7 +180,6 @@ public class Parser {
             }
 
         }
-        System.out.println("\n" + fbisParsedDocCollection.size());
         return fbisParsedDocCollection;
     }
 
