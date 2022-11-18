@@ -85,8 +85,7 @@ public class Parser {
 
 
 		}
-		System.out.println("\n");
-		System.out.println(frParsedDocCollection.size());
+		System.out.println("\nParsing Federal Register Completed");
 		return frParsedDocCollection;
 	}
 
@@ -115,16 +114,15 @@ public class Parser {
         Object[] listFiles = Arrays.stream(files).toArray();
 
 		System.out.println("Parsing Financial Times data...");
-		int n = listFiles.length + 1;
+		int n = listFiles.length ;
 		int i = 0;
 
         for (Object listFile : listFiles) {
+			i++;
+			progressBar(i, n);
             File FileTemp = (File) listFile;
             File[] tempFfileLlist = FileTemp.listFiles();
             for (File tempFile : tempFfileLlist) {
-				progressBar(i, n);
-				i++;
-
 				Document parsedDoc = null;
 				try {
 					parsedDoc = Jsoup.parse(tempFile);
@@ -143,11 +141,13 @@ public class Parser {
                     ftParsedDocCollection.add(documentMapping);
                 }
             }
-			System.out.println("\n");
-			return ftParsedDocCollection;
+
+
         }
-		System.out.println("\n");
-		return null;
+		System.out.println("\nFT Parsing Completed");
+
+		return ftParsedDocCollection;
+
     }
 
 	/***
@@ -184,6 +184,7 @@ public class Parser {
             }
 
         }
+		System.out.println("\n Parsing Foreign Broadcast Information Service data Completed");
         return fbisParsedDocCollection;
     }
 
@@ -267,7 +268,7 @@ public class Parser {
 			}
 		}
 
-		System.out.println("\nCOMPLETE!");
+		System.out.println("\nParsing LA Times data Complete");
 
         return docMapList;
     }

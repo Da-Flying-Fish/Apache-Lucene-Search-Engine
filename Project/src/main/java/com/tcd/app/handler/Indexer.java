@@ -1,6 +1,7 @@
 package com.tcd.app.handler;
 
 import com.tcd.app.helper.PropertyHelper;
+import com.tcd.app.helper.Utilities;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -33,6 +34,9 @@ public class Indexer {
         try{
             // Open the directory that contains the search index
             //Directory directory = FSDirectory.open(Paths.get("Project/resources/index/latimes.index"));
+            File file = new File(indexDirPath);
+            if(file.listFiles()!=null)
+                Utilities.deleteFolder(file);
             Directory directory = FSDirectory.open(Paths.get(indexDirPath));
 
 
