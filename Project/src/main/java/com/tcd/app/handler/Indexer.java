@@ -22,11 +22,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import static com.tcd.app.handler.Parser.progressBar;
+
 public class Indexer {
 
     public static void createIndex(ArrayList<HashMap<String,String>> collection){
         //STANDARD ANALYSER
         Analyzer analyzer = new StandardAnalyzer();
+        System.out.println("Indexing Parsed Files ...");
 
         Properties properties = PropertyHelper.readPropFile("src/config.Properties");
         String indexDirPath = properties.getProperty("IndexedDataFolderPath");
@@ -51,9 +54,10 @@ public class Indexer {
             IndexWriter iwriter = new IndexWriter(directory, config);
 
             for (int i = 0; i < collection.size(); i++) {
+                progressBar(i, collection.size());
                 addDocument(iwriter, collection.get(i));
             }
-
+            System.out.println("\nIndexing Completed");
             iwriter.close();
             directory.close();
         }catch (Exception e){

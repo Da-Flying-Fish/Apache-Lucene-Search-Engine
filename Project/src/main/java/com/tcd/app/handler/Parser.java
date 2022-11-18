@@ -184,7 +184,7 @@ public class Parser {
             }
 
         }
-		System.out.println("\n Parsing Foreign Broadcast Information Service data Completed");
+		System.out.println("\nParsing Foreign Broadcast Information Service data Completed");
         return fbisParsedDocCollection;
     }
 
@@ -348,7 +348,7 @@ public class Parser {
     	return queries;
     }
 
-    private static void progressBar(int progress, int goal) {
+    public static void progressBar(int progress, int goal) {
         int percentage = Math.round(((float)progress/(float)goal)*100);
 
         StringBuilder complete = new StringBuilder("");
