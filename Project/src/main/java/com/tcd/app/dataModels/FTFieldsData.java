@@ -1,19 +1,21 @@
 package com.tcd.app.dataModels;
 
 public enum FTFieldsData {
-    TEXT("<TEXT>"),
-    HEADLINE("<HEADLINE>"),
-    BYLINE("<BYLINE>"),
-    CORRECTION("<CORRECTION>"),
-    CORRECTION_DATE("<CORRECTION-DATE>"),
-    DOC_NO("<DOCNO>"),
-    DOC_ID("<DOCID>"),
-    DOC("<DOC>");
-    FTFieldsData(String s) {
+    DOC("DOC"),
+    DOC_NO("DOCNO"),
+    PROFILE("PROFILE"),
+    DATE("DATE"),
+    HEADLINE("HEADLINE"),
+    TEXT("TEXT"),
+    PUB("PUB");
 
+    String fieldType;
+
+    private FTFieldsData(final String fieldType) {
+        this.fieldType = fieldType;
     }
 
-    public Object getFieldType() {
-        return null;
+    public String getFieldType() {
+        return this.fieldType;
     }
 }

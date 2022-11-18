@@ -1,6 +1,8 @@
 package com.tcd.app.handler;
 
 import com.tcd.app.dataModels.Constants;
+import com.tcd.app.dataModels.FTFieldsData;
+import com.tcd.app.dataModels.Constants;
 import com.tcd.app.dataModels.FIBSFieldsData;
 import com.tcd.app.helper.PropertyHelper;
 import com.tcd.app.helper.Utilities;
@@ -14,59 +16,63 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Properties;
 
 public class Parser {
-
-	/***
-	 * Method To Parse Documents realted to Federal Register
-	 */
-	public static ArrayList<HashMap<String,String>> fRParser(Properties properties) {
-		return new ArrayList<>();
-	}
 
     /***
      * Method To Parse Documents realted to financial Times Limited
      */
-    public static ArrayList<HashMap<String,String>> fTParser(Properties properties) {
-		ArrayList<HashMap<String,String>> ftParsedDocCollection = new ArrayList<>();
+
+    public static ArrayList<HashMap<String, String>> fTParser(Properties properties) throws IOException {
+        ArrayList<HashMap<String, String>> ftParsedDocCollection = new ArrayList<>();
+
         // try-catch block to handle exceptions
         File[] files = new File[0];
-        try {
-            // Create a file object
-            File ftFileList = new File("C:\\\\Users\\\\anish\\\\IdeaProjects\\\\Apache-Lucene-Search-Engine\\\\Project\\\\resources\\\\DataSource\\\\ft");
-            String rootFolderPath = "C:\\Users\\anish\\IdeaProjects\\Apache-Lucene-Search-Engine\\Project\\resources\\DataSource\\ft\\";
+        // Create a file object
+        File ftFileList = new File("/Users/koushikkodukula/IdeaProjects/Apache-Lucene-Search-Engine2/Project/resources/DataSource/ft");
 
-            // Create a FilenameFilter
-           FilenameFilter filter = (ftFileList1, name) -> name.startsWith("ft944");
+        // Create a FilenameFilter
+        FilenameFilter filter = (ftFileList1, name) -> name.startsWith("ft9");
 
-            // Get all the names of the files present
-            // in the given directory
-            // and whose names start with "ft9"
-            files = ftFileList.listFiles(filter);
+        // Get all the names of the files present
+        // in the given directory
+        // and whose names start with "ft9"
+        files = ftFileList.listFiles(filter);
+        Object[] listFiles = Arrays.stream(files).toArray();
 
-            System.out.println("Files are:");
+        for (Object listFile : listFiles) {
+            File FileTemp = (File) listFile;
+            File[] tempFfileLlist = FileTemp.listFiles();
+            for (File tempFile : tempFfileLlist) {
 
-            // Display the names of the files
-            for (int i = 0; i < files.length; i++) {
-                System.out.println(files[i].getName());
-                String dirPath = rootFolderPath + files[i].getName();
-                System.out.println(dirPath);
-                List<File> ftList = Utilities.getFilesInDir(dirPath);
-                for (File doc : ftList) {
-                    Document parsedDoc = Jsoup.parse(doc);
-                    System.out.println(parsedDoc.toString());
-                    Elements listDocuments = parsedDoc.getElementsByTag("DOC");
-                    System.out.println(listDocuments);
-
+                Document parsedDoc = Jsoup.parse(tempFile);
+                System.out.println(parsedDoc.toString());
+                Elements listDocuments = parsedDoc.getElementsByTag(FTFieldsData.DOC.getFieldType());
+                for (Element doc : listDocuments) {
+                    HashMap<String, String> documentMapping = new HashMap<>();
+                    documentMapping.put(Constants.FT_DOC_NO, doc.getElementsByTag(String.valueOf(FTFieldsData.DOC_NO.getFieldType())).text());
+                    documentMapping.put(Constants.FT_PROFILE, doc.getElementsByTag(String.valueOf(FTFieldsData.PROFILE.getFieldType())).text());
+                    documentMapping.put(Constants.FT_DATE, doc.getElementsByTag(String.valueOf(FTFieldsData.DATE.getFieldType())).text());
+                    documentMapping.put(Constants.FT_HEADLINE, doc.getElementsByTag(String.valueOf(FTFieldsData.HEADLINE.getFieldType())).text());
+                    documentMapping.put(Constants.FT_TEXT, doc.getElementsByTag(String.valueOf(FTFieldsData.TEXT.getFieldType())).text());
+                    documentMapping.put(Constants.FT_PUB, doc.getElementsByTag(String.valueOf(FTFieldsData.PUB.getFieldType())).text());
+                    ftParsedDocCollection.add(documentMapping);
                 }
-
             }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+            System.out.println(ftParsedDocCollection.size());
 
-        return ftParsedDocCollection;
+            return ftParsedDocCollection;
+        }
+        return null;
     }
+
 
 	/***
 	 * Method To Parse Documents realted to Foreign Broadcast Information Service
