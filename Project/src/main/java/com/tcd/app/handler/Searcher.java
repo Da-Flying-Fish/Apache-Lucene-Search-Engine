@@ -24,6 +24,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -53,7 +54,7 @@ public class Searcher
  		}
         
         //STANDARD ANALYSER
-        Analyzer analyzer = new StandardAnalyzer();
+        Analyzer analyzer = new QueryExpansionAnalyser();
         
        // Create the query parser.
        String[] fields = Constants.documentFieldList;
@@ -72,14 +73,17 @@ public class Searcher
             // Create objects to read and search across the index
     		DirectoryReader ireader = DirectoryReader.open(directory);
     		IndexSearcher isearcher = new IndexSearcher(ireader);
+		    isearcher.setSimilarity(new BM25Similarity());
 
+		    System.out.println("Searching...");
             for (int i = 0; i < collection.size(); i++) {
+				Parser.progressBar(i, collection.size());
             	scoreQuery(isearcher, collection.get(i), resultFilePath, parser);
             }
-
             ireader.close();
             directory.close();
-        }catch (Exception e){
+		    System.out.println("\nSearch Completed");
+	   }catch (Exception e){
             e.printStackTrace();
             System.exit(1);
         }

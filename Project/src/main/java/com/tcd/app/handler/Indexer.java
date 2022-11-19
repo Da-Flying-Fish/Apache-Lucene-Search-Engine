@@ -9,6 +9,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.similarities.BM25Similarity;
 import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -28,7 +29,7 @@ public class Indexer {
 
     public static void createIndex(ArrayList<HashMap<String,String>> collection){
         //STANDARD ANALYSER
-        Analyzer analyzer = new StandardAnalyzer();
+        Analyzer analyzer = new QueryExpansionAnalyser();
         System.out.println("Indexing Parsed Files ...");
 
         Properties properties = PropertyHelper.readPropFile("src/config.Properties");
@@ -49,7 +50,7 @@ public class Indexer {
             // config.setIndexSort() -- USEFULL?!?
 
             //STANDARD SIMILARITY
-            config.setSimilarity(new ClassicSimilarity());
+            config.setSimilarity(new BM25Similarity());
 
             IndexWriter iwriter = new IndexWriter(directory, config);
             ArrayList<Document> luceneDocList = new ArrayList<>();
@@ -58,9 +59,11 @@ public class Indexer {
                 luceneDocList.add(addDocument(collection.get(i)));
             }
             System.out.println("\nIndexing Completed");
+            System.out.println("Saving Index file...");
             iwriter.addDocuments(luceneDocList);
             iwriter.close();
             directory.close();
+            System.out.println("Save Completed...");
         }catch (Exception e){
             e.printStackTrace();
             System.exit(1);
