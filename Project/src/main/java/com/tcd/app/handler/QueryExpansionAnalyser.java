@@ -42,7 +42,7 @@ public class QueryExpansionAnalyser extends Analyzer
 	}
 	
 	private static SynonymMap createSynonymMap() throws IOException, ParseException{    
-	    File file = new File("Project\\wn\\wn_s.pl");
+	    File file = new File("wn\\wn_s.pl");
 
 	    InputStream stream = new FileInputStream(file);
 
