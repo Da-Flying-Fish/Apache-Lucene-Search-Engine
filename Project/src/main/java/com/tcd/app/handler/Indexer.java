@@ -53,14 +53,12 @@ public class Indexer {
             config.setSimilarity(new BM25Similarity());
 
             IndexWriter iwriter = new IndexWriter(directory, config);
-            ArrayList<Document> luceneDocList = new ArrayList<>();
             for (int i = 0; i < collection.size(); i++) {
                 progressBar(i, collection.size());
-                luceneDocList.add(addDocument(collection.get(i)));
+                addDocument(collection.get(i), iwriter);
             }
             System.out.println("\nIndexing Completed");
             System.out.println("Saving Index file...");
-            iwriter.addDocuments(luceneDocList);
             iwriter.close();
             directory.close();
             System.out.println("Save Completed...");
@@ -71,7 +69,7 @@ public class Indexer {
 
     }
 
-    private static Document addDocument(Map<String, String> doc) throws IOException {
+    private static void addDocument(Map<String, String> doc, IndexWriter iwriter) throws IOException {
         Document document = new Document();
         for(Map.Entry<String, String> attribute : doc.entrySet()){
             if(Constants.ConstantKeyMapping.keySet().contains(attribute.getKey()))
@@ -86,7 +84,7 @@ public class Indexer {
                 }
             }
         }
-        return document;
+        iwriter.addDocument(document);
     }
     public void deleteIndex(File file) {
 
