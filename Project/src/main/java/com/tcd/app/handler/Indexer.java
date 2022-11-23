@@ -27,6 +27,8 @@ import static com.tcd.app.handler.Parser.progressBar;
 
 public class Indexer {
 
+	static int indexProgress = 0;
+	
     public static void createIndex(ArrayList<HashMap<String,String>> collection){
         //STANDARD ANALYSER
         Analyzer analyzer = new QueryExpansionAnalyser();
@@ -53,10 +55,16 @@ public class Indexer {
             config.setSimilarity(new BM25Similarity());
 
             IndexWriter iwriter = new IndexWriter(directory, config);
-            for (int i = 0; i < collection.size(); i++) {
-                progressBar(i, collection.size());
-                addDocument(collection.get(i), iwriter);
-            }
+            collection.parallelStream().forEach((i) -> {
+            	progressBar(indexProgress, collection.size());
+                try {
+					addDocument(i, iwriter);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+                indexProgress++;
+            });
+            indexProgress = 0;
             System.out.println("\nIndexing Completed");
             System.out.println("Saving Index file...");
             iwriter.close();
