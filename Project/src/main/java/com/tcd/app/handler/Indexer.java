@@ -3,6 +3,7 @@ package com.tcd.app.handler;
 import com.tcd.app.helper.PropertyHelper;
 import com.tcd.app.helper.Utilities;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -31,7 +32,7 @@ public class Indexer {
 	
     public static void createIndex(ArrayList<HashMap<String,String>> collection){
         //STANDARD ANALYSER
-        Analyzer analyzer = new QueryExpansionAnalyser();
+        Analyzer analyzer = new CustomAnalyzer();
         System.out.println("Indexing Parsed Files ...");
 
         Properties properties = PropertyHelper.readPropFile("src/config.Properties");

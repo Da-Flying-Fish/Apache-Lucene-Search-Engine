@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import com.tcd.app.dataModels.Constants;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -54,7 +55,7 @@ public class Searcher
  		}
         
         //STANDARD ANALYSER
-        Analyzer analyzer = new QueryExpansionAnalyser();
+        Analyzer analyzer = new CustomAnalyzer();
         
        // Create the query parser.
        String[] fields = Constants.documentFieldList;
@@ -65,7 +66,9 @@ public class Searcher
             Directory directory = FSDirectory.open(Paths.get(indexDirPath));
             
             path = Paths.get(resultDirPath);
-     		Files.createDirectory(path);
+            
+            if(!Files.exists(path))
+            	Files.createDirectory(path);
             
             path = Paths.get(resultFilePath);
     		Files.deleteIfExists(path);
