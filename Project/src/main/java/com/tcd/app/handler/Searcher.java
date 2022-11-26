@@ -1,7 +1,6 @@
 package com.tcd.app.handler;
 
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,21 +11,16 @@ import java.util.Properties;
 
 import com.tcd.app.dataModels.Constants;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.queries.mlt.MoreLikeThisQuery;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
-import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.similarities.BM25Similarity;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -54,7 +48,7 @@ public class Searcher
  			return;
  		}
         
-        //STANDARD ANALYSER
+        //CUSTOM ANALYSER
         Analyzer analyzer = new CustomAnalyzer();
         
        // Create the query parser.
@@ -81,7 +75,7 @@ public class Searcher
 		    System.out.println("Searching...");
             for (int i = 0; i < collection.size(); i++) {
 				Parser.progressBar(i, collection.size());
-            	scoreQuery(isearcher, collection.get(i), resultFilePath, parser);
+            	scoreQuery(isearcher, collection.get(i), resultFilePath, parser, analyzer, ireader);
             }
             ireader.close();
             directory.close();
@@ -95,14 +89,12 @@ public class Searcher
 	}
 	
 	private static void scoreQuery(IndexSearcher isearcher, Map<String, String> queryMap, 
-						String resultFile, MultiFieldQueryParser parser) throws Exception {
-		
-		String queryString = queryMap.get("title") + " "
-				     + queryMap.get("description") + " "
-		             + queryMap.get("narrative");
+						String resultFile, MultiFieldQueryParser parser, Analyzer analyzer, DirectoryReader ireader) throws Exception {
+		String queryString = queryMap.get("title") + " " + queryMap.get("description") + " " + queryMap.get("narrative");
 		queryString = queryString.replace("/", "");
 		Query query = parser.parse(queryString);
-		ScoreDoc[] hits = isearcher.search(query, MAX_RESULTS).scoreDocs;
+		Query queryExpanded = expandQuery(isearcher, analyzer, query, ireader);
+		ScoreDoc[] hits = isearcher.search(queryExpanded, MAX_RESULTS).scoreDocs;
 	    for (int i = 0; i < hits.length; i++)
 	    {
 		   Document hitDoc = isearcher.doc(hits[i].doc);
@@ -113,6 +105,25 @@ public class Searcher
 		   fw.close();
 	    }
 		
+	}
+	
+	private static Query expandQuery(IndexSearcher isearcher, Analyzer analyzer, Query query,
+						 DirectoryReader ireader) throws Exception {
+		BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
+		queryBuilder.add(query, BooleanClause.Occur.SHOULD);
+		ScoreDoc[] hits = isearcher.search(query, 10).scoreDocs;
+
+		for (int i = 0; i < hits.length; i++)
+	    {
+			Document hitDoc = ireader.document(hits[i].doc);
+			String field = hitDoc.getField("TEXT").stringValue();
+			String[] moreLikeThisField = {"TEXT"};
+			MoreLikeThisQuery moreLikeThisQueryExpanded = new MoreLikeThisQuery(field, moreLikeThisField, analyzer, "TEXT");
+			Query queryExpanded = moreLikeThisQueryExpanded.rewrite(ireader);
+			queryBuilder.add(queryExpanded, BooleanClause.Occur.SHOULD);
+		}
+		
+		return queryBuilder.build();
 	}
 	
 }

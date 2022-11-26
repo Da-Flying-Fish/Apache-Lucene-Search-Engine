@@ -31,7 +31,7 @@ public class Indexer {
 	static int indexProgress = 0;
 	
     public static void createIndex(ArrayList<HashMap<String,String>> collection){
-        //STANDARD ANALYSER
+        //CUSTOM ANALYSER
         Analyzer analyzer = new CustomAnalyzer();
         System.out.println("Indexing Parsed Files ...");
 
