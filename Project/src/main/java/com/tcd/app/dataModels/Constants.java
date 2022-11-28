@@ -24,6 +24,17 @@ public class Constants {
     public static  String FR_DOC_NO = "docno" ;
     public static  String FR_PARENT = "parent" ;
     public static  String FR_TEXT= "text" ;
+
+    public static  String QUERY_TITLE="title";
+    public static String  QUERY_DES="description";
+    public static String QUERY_NAR="narrative";
+
+    public static String DOC_ID="DOC_ID";
+    public static String DOC_TITLE="TITLE";
+    public static String DOC_DATE="DATE";
+    public static String DOC_TEXT="TEXT";
+    public static String DOC_OTHER="OTHER";
+
     public static HashMap<String,String> ConstantKeyMapping ;
     static {
         ConstantKeyMapping = new HashMap<>();
@@ -48,7 +59,9 @@ public class Constants {
         ConstantKeyMapping.put("TEXT","TEXT");
 
     }
+
     public static String[] documentFieldList = new String[]{"DOC_ID","TITLE","DATE","TEXT","OTHER"};
+
 
 
 
