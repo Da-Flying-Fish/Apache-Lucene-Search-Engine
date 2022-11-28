@@ -13,6 +13,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.BreakIterator;
 import java.util.*;
 import java.io.File;
 import java.io.FilenameFilter;
@@ -333,10 +334,12 @@ public class Parser {
 					   if(!end)
 						   line = br.readLine();
 				   }
+				   String [] relevance = narrativeRelevancy(narrative);
 				   entry.put("number", number);
 				   entry.put("title", title);
 				   entry.put("description", description);
-				   entry.put("narrative", narrative);
+				   entry.put("relevant narrative", relevance[0]);
+				   entry.put("not relevant narrative", relevance[1]);
 				   queries.add(entry);
 			   }
 			   line = br.readLine();
@@ -346,6 +349,24 @@ public class Parser {
 			e.printStackTrace();
 		}
     	return queries;
+    }
+    
+    public static String [] narrativeRelevancy(String narrative) {
+    	String [] relevant = new String[]{"",""};
+    	BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
+    	iterator.setText(narrative);
+    	int start = iterator.first();
+    	for (int end = iterator.next();
+    	    end != BreakIterator.DONE;
+    	    start = end, end = iterator.next()) {
+    		String sentence = narrative.substring(start,end);
+    		
+    		if (sentence.contains("not relevant"))
+    			relevant[1] = sentence + " ";
+    		else
+    			relevant[0] = sentence + " ";	
+    	}
+    	return relevant;
     }
 
     public static void progressBar(int progress, int goal) {
