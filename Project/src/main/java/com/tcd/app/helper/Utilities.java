@@ -45,7 +45,7 @@ public class Utilities {
     public static CharArraySet getStopWords(){
         CharArraySet stopwords = null;
         try {
-            byte[] encoded = Files.readAllBytes(Paths.get("Project/resources/stopwords.txt"));
+            byte[] encoded = Files.readAllBytes(Paths.get("resources/stopwords.txt"));
             String[] words = new String(encoded, StandardCharsets.UTF_8).split("\n");
             stopwords =  new CharArraySet(Arrays.asList(words), true);
         } catch (IOException ioe) {
