@@ -338,8 +338,8 @@ public class Parser {
 				   entry.put("number", number);
 				   entry.put("title", title);
 				   entry.put("description", description);
-				   entry.put("relevant narrative", relevance[0]);
-				   entry.put("not relevant narrative", relevance[1]);
+				   entry.put("relevant_narrative", relevance[0]);
+				   entry.put("not_relevant_narrative", relevance[1]);
 				   queries.add(entry);
 			   }
 			   line = br.readLine();

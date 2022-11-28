@@ -27,7 +27,10 @@ public class Constants {
 
     public static  String QUERY_TITLE="title";
     public static String  QUERY_DES="description";
-    public static String QUERY_NAR="narrative";
+//    public static String QUERY_NAR="narrative";
+    public static String QUERY_NO="number";
+    public static String QUERY_RELAVENT="relevant_narrative";
+    public static String QUERY_NO_RELAVENT="not_relevant_narrative";
 
     public static String DOC_ID="DOC_ID";
     public static String DOC_TITLE="TITLE";

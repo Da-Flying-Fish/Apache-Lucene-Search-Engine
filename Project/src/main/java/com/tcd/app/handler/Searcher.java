@@ -94,11 +94,18 @@ public class Searcher
 						String resultFile, MultiFieldQueryParser parser, Analyzer analyzer, DirectoryReader ireader) throws Exception {
 		Query queryTitle=parser.parse(queryMap.get(Constants.QUERY_TITLE).replace("/", ""));
 		Query queryDescription = parser.parse(queryMap.get(Constants.QUERY_DES).replace("/", ""));
-		Query queryNarrative = parser.parse(queryMap.get(Constants.QUERY_NAR).replace("/", ""));
 		HashMap<String,Query> queryHashMap = new HashMap<>();
+		if((queryMap.containsKey(Constants.QUERY_RELAVENT))&&(!queryMap.get(Constants.QUERY_RELAVENT).isEmpty())){
+			Query queryRelavent =parser.parse(queryMap.get(Constants.QUERY_RELAVENT).replace("/", ""));
+			queryHashMap.put(Constants.QUERY_RELAVENT,new BoostQuery(queryRelavent, (float)0.3));
+		}
+//		if((queryMap.containsKey(Constants.QUERY_NO_RELAVENT))&&(!queryMap.get(Constants.QUERY_NO_RELAVENT).isEmpty())){
+//			Query queryNotRelavent =parser.parse(queryMap.get(Constants.QUERY_NO_RELAVENT).replace("/", ""));
+////			queryHashMap.put(Constants.QUERY_NO_RELAVENT,new BoostQuery(queryNotRelavent, (float)0.2));
+//		}
+
 		queryHashMap.put(Constants.QUERY_TITLE,new BoostQuery(queryTitle, (float)1.0));
-		queryHashMap.put(Constants.QUERY_DES,new BoostQuery(queryDescription, (float)0.4));
-		queryHashMap.put(Constants.QUERY_NAR,new BoostQuery(queryNarrative, (float)0.3));
+		queryHashMap.put(Constants.QUERY_DES,new BoostQuery(queryDescription, (float)0.5));
 		Query queryExpanded = expandQuery(isearcher, analyzer,queryHashMap, ireader);
 
 
@@ -107,7 +114,6 @@ public class Searcher
 	    {
 		   Document hitDoc = isearcher.doc(hits[i].doc);
 		   String id = queryMap.get("number");
-		   
 		   FileWriter fw = new FileWriter(resultFile, true);
 		   fw.write(id + " 0 " + hitDoc.get("DOC_ID") + " 0 " + hits[i].score + " Custom\n");
 		   fw.close();
@@ -120,7 +126,10 @@ public class Searcher
 		BooleanQuery.Builder queryBuilder = new BooleanQuery.Builder();
 		queryBuilder.add(query_hash.get(Constants.QUERY_TITLE),BooleanClause.Occur.SHOULD);
 		queryBuilder.add(query_hash.get(Constants.QUERY_DES),BooleanClause.Occur.MUST);
-		queryBuilder.add(query_hash.get(Constants.QUERY_NAR),BooleanClause.Occur.MUST);
+//		if(query_hash.containsKey(Constants.QUERY_NO_RELAVENT))
+//			queryBuilder.add(query_hash.get(Constants.QUERY_NO_RELAVENT),BooleanClause.Occur.MUST_NOT);
+		if(query_hash.containsKey(Constants.QUERY_RELAVENT))
+			queryBuilder.add(query_hash.get(Constants.QUERY_RELAVENT),BooleanClause.Occur.MUST);
 		BooleanQuery combine_query=queryBuilder.build();
 		ScoreDoc[] hits = isearcher.search(combine_query, 10).scoreDocs;
 		for (int i = 0; i < hits.length; i++)
