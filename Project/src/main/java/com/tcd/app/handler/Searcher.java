@@ -18,7 +18,7 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.*;
-import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -72,7 +72,7 @@ public class Searcher
             // Create objects to read and search across the index
     		DirectoryReader ireader = DirectoryReader.open(directory);
     		IndexSearcher isearcher = new IndexSearcher(ireader);
-		    isearcher.setSimilarity(new BM25Similarity());
+		    isearcher.setSimilarity( (new MultiSimilarity(new Similarity[]{new BM25Similarity(),new BooleanSimilarity()})));
 
 		    System.out.println("Searching...");
             for (int i = 0; i < collection.size(); i++) {

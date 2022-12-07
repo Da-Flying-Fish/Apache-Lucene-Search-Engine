@@ -10,8 +10,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.search.similarities.BM25Similarity;
-import org.apache.lucene.search.similarities.ClassicSimilarity;
+import org.apache.lucene.search.similarities.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import com.tcd.app.dataModels.Constants;
@@ -53,7 +52,7 @@ public class Indexer {
             // config.setIndexSort() -- USEFULL?!?
 
             //STANDARD SIMILARITY
-            config.setSimilarity(new BM25Similarity());
+            config.setSimilarity( (new MultiSimilarity(new Similarity[]{new BM25Similarity(), new BooleanSimilarity()})));
 
             IndexWriter iwriter = new IndexWriter(directory, config);
             collection.parallelStream().forEach((i) -> {
